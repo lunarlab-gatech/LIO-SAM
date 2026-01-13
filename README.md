@@ -67,36 +67,38 @@ This is the original ROS1 implementation of LIO-SAM. For a ROS2 implementation s
   sudo apt install libgtsam-dev libgtsam-unstable-dev
   ```
 
-## Install
+## Installation
 
-Use the following commands to download and compile the package.
+### Docker Setup
+
+Make sure to install:
+- [Docker](https://docs.docker.com/engine/install/ubuntu/)
+
+Then, create the ros workspace with the `src` folder, and then navigate the terminal to that `src` folder. _Creating the workspace outside the docker helps you keep your files and changes within the workspace even if you delete the un-committed docker container._ Then, clone this repository into the `src` folder.
+
+After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, Edit the `enter_container.sh` script with the following paths:
+- `DATA_DIR=`: The directory where the HERCULES dataset is located
+- `WS_DIR=`: The directory of the ROS workspace
+
+Now, run the following commands:
+```
+build_container.sh
+run_container.sh
+```
+
+To re-enter the container, run the following command:
+```
+enter_container.sh
+```
+
+### Build
+
+Run the following command in the root of the ROS workspace to build the package:
 
 ```
-cd ~/catkin_ws/src
-git clone https://github.com/TixiaoShan/LIO-SAM.git
-cd ..
+source /opt/ros/kinetic/setup.bash
 catkin_make
 ```
-
-## Using Docker
-Build image (based on ROS1 Kinetic):
-
-```bash
-docker build -t liosam-kinetic-xenial .
-```
-
-Once you have the image, start a container as follows:
-
-```bash
-docker run --init -it -d \
-  -v /etc/localtime:/etc/localtime:ro \
-  -v /etc/timezone:/etc/timezone:ro \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e DISPLAY=$DISPLAY \
-  liosam-kinetic-xenial \
-  bash
-```
-
 
 ## Prepare lidar data
 

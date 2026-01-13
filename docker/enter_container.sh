@@ -1,0 +1,1 @@
+docker start lio_sam && docker exec -it lio_sam /bin/bash
