@@ -2,57 +2,6 @@
 
 **A real-time lidar-inertial odometry package. We strongly recommend the users read this document thoroughly and test the package with the provided dataset first. A video of the demonstration of the method can be found on [YouTube](https://www.youtube.com/watch?v=A0H8CoORZJU).**
 
-<p align='center'>
-    <img src="./config/doc/demo.gif" alt="drawing" width="800"/>
-</p>
-
-<p align='center'>
-    <img src="./config/doc/device-hand-2.png" alt="drawing" width="200"/>
-    <img src="./config/doc/device-hand.png" alt="drawing" width="200"/>
-    <img src="./config/doc/device-jackal.png" alt="drawing" width="200"/>
-    <img src="./config/doc/device-boat.png" alt="drawing" width="200"/>
-</p>
-
-## Menu
-
-  - [**System architecture**](#system-architecture)
-
-  - [**Notes on ROS2 branch**](#notes-on-ros2-branch)
-
-  - [**Package dependency**](#dependency)
-
-  - [**Package install**](#install)
-
-  - [**Prepare lidar data**](#prepare-lidar-data) (must read)
-
-  - [**Prepare IMU data**](#prepare-imu-data) (must read)
-
-  - [**Sample datasets**](#sample-datasets)
-
-  - [**Run the package**](#run-the-package)
-
-  - [**Other notes**](#other-notes)
-
-  - [**Issues**](#issues)
-
-  - [**Paper**](#paper)
-
-  - [**TODO**](#todo)
-
-  - [**Related Package**](#related-package)
-
-  - [**Acknowledgement**](#acknowledgement)
-
-## System architecture
-
-<p align='center'>
-    <img src="./config/doc/system.png" alt="drawing" width="800"/>
-</p>
-
-We design a system that maintains two graphs and runs up to 10x faster than real-time.
-  - The factor graph in "mapOptimization.cpp" optimizes lidar odometry factor and GPS factor. This factor graph is maintained consistently throughout the whole test.
-  - The factor graph in "imuPreintegration.cpp" optimizes IMU and lidar odometry factor and estimates IMU bias. This factor graph is reset periodically and guarantees real-time odometry estimation at IMU frequency.
-
 ## Notes on ROS2 branch
 
 There are some features of the original ROS1 version that are currently missing in this ROS2 version, namely:
@@ -67,78 +16,35 @@ This branch was tested with Ouster lidars, Xsens IMUs and SBG-Systems IMUs using
 
 In these tests, the IMU was mounted on the bottom of the lidar such that their x-axes pointed in the same direction. The parameters `extrinsicRot` and `extrinsicRPY` in `params.yaml` correspond to this constellation.
 
-## Dependencies
+## Installation
+### Docker Setup
 
-Tested with ROS2 versions foxy and galactic on Ubuntu 20.04 and humble on Ubuntu 22.04
-- [ROS2](https://docs.ros.org/en/humble/Installation.html)
-  ```
-  sudo apt install ros-<ros2-version>-perception-pcl \
-		   ros-<ros2-version>-pcl-msgs \
-		   ros-<ros2-version>-vision-opencv \
-		   ros-<ros2-version>-xacro
-  ```
-- [gtsam](https://gtsam.org/get_started) (Georgia Tech Smoothing and Mapping library)
-  ```
-  # Add GTSAM-PPA
-  sudo add-apt-repository ppa:borglab/gtsam-release-4.1
-  sudo apt install libgtsam-dev libgtsam-unstable-dev
-  ```
+Make sure to install:
+- [Docker](https://docs.docker.com/engine/install/ubuntu/)
 
-## Install
+Then, create the ros workspace with the `src` folder, and then navigate the terminal to that `src` folder. _Creating the workspace outside the docker helps you keep your files and changes within the workspace even if you delete the un-committed docker container._ Then, clone this repository into the `src` folder.
 
-Use the following commands to download and compile the package.
+After that, navigate to the `docker` directory. Log in to the user that you want the docker file to create in the container. Then, Edit the `enter_container.sh` script with the following paths:
+- `DATA_DIR=`: The directory where the HERCULES dataset is located
+- `WS_DIR=`: The directory of the ROS workspace
 
-  ```
-  cd ~/ros2_ws/src
-  git clone https://github.com/TixiaoShan/LIO-SAM.git
-  cd LIO-SAM
-  git checkout ros2
-  cd ..
-  colcon build
-  ```
-
-## Using Docker
-
-Build image (based on ROS2 Humble):
-
+Now, run the following commands:
 ```
-docker build -t liosam-humble-jammy .
+build_container.sh
+run_container.sh
 ```
 
-Once you have the image, you can start a container by using one of the following methods:
+The rest of this README **assumes that you are inside the Docker container**. For easier debugging and use, its highly recommended to install the [VSCode Docker extension](https://code.visualstudio.com/docs/containers/overview), which allows you to start/stop the container and additionally attach VSCode to the container by right-clicking on the container and selecting `Attach Visual Studio Code`. If this isn't possible, entering the container can be done on the command line via docker commands (e.g. docker exec).
 
-1. `docker run`
+### Build
 
-```
-docker run --init -it -d \
-  --name liosam-humble-jammy-container \
-  -v /etc/localtime:/etc/localtime:ro \
-  -v /etc/timezone:/etc/timezone:ro \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e DISPLAY=$DISPLAY \
-  --runtime=nvidia --gpus all \
-  liosam-humble-jammy \
-  bash
-```
-
-2. `docker compose`
-
-Start a docker compose container:
+Run the following command in the root of the ROS workspace to build the package:
 
 ```
-docker compose up -d
+source /opt/ros/humble/setup.bash
+colcon build
 ```
 
-Stopping a docker compose container:
-```
-docker compose down
-```
-
-To enter into the running container use:
-
-```
-docker exec -it liosam-humble-jammy-container bash
-```
 ## Prepare lidar data
 
 The user needs to prepare the point cloud data in the correct format for cloud deskewing, which is mainly done in "imageProjection.cpp". The two requirements are:
