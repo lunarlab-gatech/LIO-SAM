@@ -4,6 +4,8 @@ environment:
   ROS_DIR: '/opt/ros/humble'
   DATA_DIR: "/home/${USER}/data/LIO-SAM_Public_Dataset/"
   ROS_WS: '/home/${USER}/lio_sam_ws'
+  DATASET_NUM: 'V2.2.0'
+  ROBOT_NAME: 'Husky1'
 options:
   default-command: /bin/bash
 
@@ -18,8 +20,7 @@ windows:
   - shell_command:
     - ros2 launch lio_sam run.launch.py
   - shell_command:
-    - cd ${DATA_DIR}
-    - ros2 bag play walking_dataset
+    - python3 src/LIO-SAM/dependencies/robotdataprocess/examples/Hercules/publish/publish_data_LIO-SAM.py --dataset_num $DATASET_NUM --robot_name $ROBOT_NAME
   - shell_command:
     -
   - shell_command:

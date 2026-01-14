@@ -36,6 +36,20 @@ run_container.sh
 
 The rest of this README **assumes that you are inside the Docker container**. For easier debugging and use, its highly recommended to install the [VSCode Docker extension](https://code.visualstudio.com/docs/containers/overview), which allows you to start/stop the container and additionally attach VSCode to the container by right-clicking on the container and selecting `Attach Visual Studio Code`. If this isn't possible, entering the container can be done on the command line via docker commands (e.g. docker exec).
 
+### Python Installation
+
+Install the git submodules with the following command:
+```
+git submodule update --init --recursive
+```
+
+Now, install the `robotdataprocess` repository for data publishing:
+```
+cd src/LIO-SAM/dependencies/robotdataprocess/
+pip install . "numpy<1.25" && pip uninstall matplotlib -y
+pip install --upgrade pydantic typeguard
+```
+
 ### Build
 
 Run the following command in the root of the ROS workspace to build the package:

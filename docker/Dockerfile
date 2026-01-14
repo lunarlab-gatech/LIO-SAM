@@ -46,3 +46,6 @@ RUN echo "export USER=${USERNAME}" >> ~/.bashrc
 # Install tmuxp
 RUN sudo apt install tmux tmuxp -y
 RUN echo "set -g mouse on" >> /home/${USERNAME}/.tmux.conf
+
+# Install pip
+RUN sudo apt update && sudo apt install -y python3-pip
