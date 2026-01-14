@@ -1,1 +1,1 @@
-docker start lio_sam && docker exec -it lio_sam /bin/bash
+docker start lio_sam_ros1 && docker exec -it lio_sam_ros1 /bin/bash

@@ -2,4 +2,4 @@ docker build \
   --build-arg USERNAME=$(id -un) \
   --build-arg USER_UID=$(id -u) \
   --build-arg USER_GID=$(id -g) \
-  -t lio_sam .
+  -t lio_sam_ros1 .

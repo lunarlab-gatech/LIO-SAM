@@ -102,12 +102,14 @@ The user needs to prepare the point cloud data in the correct format for cloud d
 
 1. Run the launch file:
 ```
+source ~/lio_sam_ws/devel/setup.bash
 roslaunch lio_sam run.launch
 ```
 
 2. Play existing bag files:
 ```
-rosbag play your-bag.bag -r 3
+source ~/lio_sam_ws/devel/setup.bash
+rosbag play walking_dataset.bag -r 3
 ```
 
 ## Other notes

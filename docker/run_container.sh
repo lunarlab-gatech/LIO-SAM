@@ -2,7 +2,7 @@ DATA_DIR="/media/$USER/T73/"
 ROS_WS_DIR="/home/$USER/Research/ros_workspaces/lio_sam_ws"
 
 docker run --init -it \
-    --name="lio_sam" \
+    --name="lio_sam_ros1" \
     --shm-size=2gb \
     --net="host" \
     --privileged \
@@ -23,5 +23,5 @@ docker run --init -it \
     --volume="/etc/localtime:/etc/localtime:ro" \
     --volume="/etc/timezone:/etc/timezone:ro" \
     --volume /tmp/runtime-$USER:/tmp/runtime-$USER \
-    lio_sam  \
+    lio_sam_ros1  \
     /bin/bash
