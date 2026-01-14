@@ -77,14 +77,9 @@ README.md of the master branch contains some links to ROS1 rosbags. It is possib
 
 ## Run the package
 
-1. Run the launch file:
+Run the following command:
 ```
-ros2 launch lio_sam run.launch.py
-```
-
-2. Play existing bag files:
-```
-ros2 bag play your-bag.bag
+tmuxp load src/LIO-SAM/tmuxp/run.tmuxp.yaml
 ```
 
 ## Save map

@@ -1,0 +1,31 @@
+session_name: lio_sam
+
+environment:
+  ROS_DIR: '/opt/ros/humble'
+  DATA_DIR: "/home/${USER}/data/LIO-SAM_Public_Dataset/"
+  ROS_WS: '/home/${USER}/lio_sam_ws'
+options:
+  default-command: /bin/bash
+
+windows:
+- window_name: main
+  layout: tiled
+  focus: true
+  shell_command_before:
+  - source $ROS_DIR/setup.bash
+  - source $ROS_WS/install/setup.bash
+  panes:
+  - shell_command:
+    - ros2 launch lio_sam run.launch.py
+  - shell_command:
+    - cd ${DATA_DIR}
+    - ros2 bag play walking_dataset
+  - shell_command:
+    -
+  - shell_command:
+    - 
+
+- window_name: kill
+  layout: tiled
+  panes:
+  - tmux kill-session -t lio_sam_

@@ -42,3 +42,7 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 SHELL ["/bin/bash", "-c"]
 RUN echo "export USER=${USERNAME}" >> ~/.bashrc
+
+# Install tmuxp
+RUN sudo apt install tmux tmuxp -y
+RUN echo "set -g mouse on" >> /home/${USERNAME}/.tmux.conf
