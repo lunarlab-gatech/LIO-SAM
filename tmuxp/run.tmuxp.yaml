@@ -20,9 +20,9 @@ windows:
   - shell_command:
     - ros2 launch lio_sam run.launch.py
   - shell_command:
-    - python3 src/LIO-SAM/dependencies/robotdataprocess/examples/Hercules/publish/publish_data_LIO-SAM.py --dataset_num $DATASET_NUM --robot_name $ROBOT_NAME
+    - 
   - shell_command:
-    -
+    - python3 src/LIO-SAM/dependencies/robotdataprocess/examples/Hercules/publish/publish_data_LIO-SAM.py --dataset_num $DATASET_NUM --robot_name $ROBOT_NAME
   - shell_command:
     - 
 

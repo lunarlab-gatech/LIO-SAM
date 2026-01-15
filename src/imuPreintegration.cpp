@@ -138,10 +138,12 @@ public:
             }
             tf2::Stamped<tf2::Transform> tb(
                 tCur * lidar2Baselink, tf2_ros::fromMsg(odomMsg->header.stamp), odometryFrame);
+            
             tCur = tb;
         }
         geometry_msgs::msg::TransformStamped ts;
         tf2::convert(tCur, ts);
+        ts.header.frame_id = odometryFrame;
         ts.child_frame_id = baselinkFrame;
         tfBroadcaster->sendTransform(ts);
 
