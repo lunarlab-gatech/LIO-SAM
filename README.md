@@ -100,16 +100,32 @@ The user needs to prepare the point cloud data in the correct format for cloud d
 
 ## Run the package
 
+### GRaCo Dataset
+
 1. Run the launch file:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-roslaunch lio_sam run.launch saveOdometryDirectory:=/home/$USER/data/GRaCo_dataset/results/LIO-SAM/ground/ground-01/
+roslaunch lio_sam run.launch dataset:=GRaCo saveOdometryDirectory:=/home/$USER/data/GRaCo_dataset/results/LIO-SAM/ground/ground-01/
 ```
 
 2. Play existing bag files:
 ```
 source ~/lio_sam_ws/devel/setup.bash
 rosbag play ground-01.bag -r 1
+```
+
+### HERCULES Dataset
+ 
+1. Run the launch file:
+```
+source ~/lio_sam_ws/devel/setup.bash
+roslaunch lio_sam run.launch dataset:=Hercules saveOdometryDirectory:=/home/$USER/data/Hercules_datasets/V2.3.C/results/LIO-SAM/ground/ground-01/
+```
+
+2. Play existing bag files:
+```
+source ~/lio_sam_ws/devel/setup.bash
+rosbag play Husky1.bag -r 1
 ```
 
 ## Other notes
