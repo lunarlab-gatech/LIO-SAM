@@ -1,16 +1,16 @@
 lio_sam:
 
   # Topics
-  pointCloudTopic: "points_raw"               # Point cloud data
-  imuTopic: "imu_raw"                         # IMU data
+  pointCloudTopic: "/velodyne/points"         # Point cloud data
+  imuTopic: "/gnss/imu"                       # IMU data
   odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
   gpsTopic: "odometry/gpsz"                   # GPS odometry topic from navsat, see module_navsat.launch file
 
   # Frames
-  lidarFrame: "base_link"
-  baselinkFrame: "base_link"
+  lidarFrame: "velodyne"
+  baselinkFrame: "velodyne"
   odometryFrame: "odom"
-  mapFrame: "map"
+  mapFrame: "base_enu"
 
   # GPS Settings
   useImuHeadingInitialization: true           # if using GPS data, set to "true"
@@ -31,27 +31,21 @@ lio_sam:
   lidarMaxRange: 1000.0                       # default: 1000.0, maximum lidar range to be used
 
   # IMU Settings
-  imuAccNoise: 3.9939570888238808e-03
-  imuGyrNoise: 1.5636343949698187e-03
-  imuAccBiasN: 6.4356659353532566e-05
-  imuGyrBiasN: 3.5640318696367613e-05
+  imuAccNoise: 1.0028108e-02
+  imuGyrNoise: 8.3723892e-04
+  imuAccBiasN: 5.5367077e-04
+  imuGyrBiasN: 1.5212086e-05
   imuGravity: 9.80511
   imuRPYWeight: 0.01
 
   # Extrinsics: T_lb (lidar -> imu)
-  extrinsicTrans: [0.0, 0.0, 0.0]
-  extrinsicRot: [-1, 0, 0,
-                  0, 1, 0,
-                  0, 0, -1]
-  extrinsicRPY: [0, -1, 0,
-                 1, 0, 0,
-                 0, 0, 1]
-  # extrinsicRot: [1, 0, 0,
-  #                 0, 1, 0,
-  #                 0, 0, 1]
-  # extrinsicRPY: [1, 0, 0,
-  #                 0, 1, 0,
-  #                 0, 0, 1]
+  extrinsicTrans:  [ 0.0126906,  0.0207969, -0.122356 ]
+  extrinsicRot:    [ 0.99991641, -0.01025064, -0.00787932,
+                    0.01018984,  0.9999183,  -0.00771833,
+                    0.00795779,  0.0076374,   0.99993917 ]
+  extrinsicRPY: [ 0.99991641, -0.01025064, -0.00787932,
+                  0.01018984,  0.9999183,  -0.00771833,
+                  0.00795779,  0.0076374,   0.99993917 ]
 
   # LOAM feature threshold
   edgeThreshold: 1.0
@@ -92,16 +86,13 @@ lio_sam:
   globalMapVisualizationPoseDensity: 10.0       # meters, global map visualization keyframe density
   globalMapVisualizationLeafSize: 1.0           # meters, global map visualization cloud density
 
-
-
-
 # Navsat (convert GPS coordinates to Cartesian)
 navsat:
   frequency: 50
   wait_for_datum: false
   delay: 0.0
   magnetic_declination_radians: 0
-  yaw_offset: 0
+  yaw_offset: 0   # We lack a magnetometer, so the offset depends on where its initialized... not sure how to set this.
   zero_altitude: true
   broadcast_utm_transform: false
   broadcast_utm_transform_as_parent_frame: false
@@ -110,9 +101,9 @@ navsat:
 # EKF for Navsat
 ekf_gps:
   publish_tf: false
-  map_frame: map
+  map_frame: base_enu
   odom_frame: odom
-  base_link_frame: base_link
+  base_link_frame: velodyne
   world_frame: odom
 
   frequency: 50

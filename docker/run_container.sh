@@ -1,5 +1,5 @@
 DATA_DIR="/media/$USER/T73/"
-ROS_WS_DIR="/home/$USER/Research/ros_workspaces/lio_sam_ws"
+ROS_WS_DIR="/home/$USER/Research/ros_workspaces/lio_sam_ros1_ws"
 
 docker run --init -it \
     --name="lio_sam_ros1" \

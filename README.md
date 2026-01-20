@@ -109,7 +109,7 @@ roslaunch lio_sam run.launch
 2. Play existing bag files:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-rosbag play walking_dataset.bag -r 3
+rosbag play ground-01.bag -r 1
 ```
 
 ## Other notes
