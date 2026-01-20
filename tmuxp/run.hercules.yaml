@@ -2,9 +2,8 @@ session_name: lio_sam
 
 environment:
   ROS_DIR: '/opt/ros/humble'
-  DATA_DIR: "/home/${USER}/data/LIO-SAM_Public_Dataset/"
   ROS_WS: '/home/${USER}/lio_sam_ws'
-  DATASET_NUM: 'V2.2.0'
+  DATASET_NUM: 'V2.3.C.Temp'
   ROBOT_NAME: 'Husky1'
 options:
   default-command: /bin/bash

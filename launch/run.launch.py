@@ -17,7 +17,7 @@ def generate_launch_description():
         'params_file',
         default_value=os.path.join(
             share_dir, 'config', 'params.yaml'),
-        description='FPath to the ROS2 parameters file to use.')
+        description='Path to the ROS2 parameters file to use.')
 
     print("urdf_file_name : {}".format(xacro_path))
 
@@ -26,7 +26,7 @@ def generate_launch_description():
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
-            arguments='0.0 0.0 0.0 0.0 0.0 0.0 map odom'.split(' '),
+            arguments='0.0 0.0 0.0 0.0 0.0 0.0 base_enu odom'.split(' '),
             parameters=[parameter_file],
             output='screen'
             ),
