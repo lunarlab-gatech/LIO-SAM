@@ -103,7 +103,7 @@ The user needs to prepare the point cloud data in the correct format for cloud d
 1. Run the launch file:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-roslaunch lio_sam run.launch
+roslaunch lio_sam run.launch saveOdometryDirectory:=/home/$USER/data/GRaCo_dataset/results/LIO-SAM/ground/ground-01/
 ```
 
 2. Play existing bag files:

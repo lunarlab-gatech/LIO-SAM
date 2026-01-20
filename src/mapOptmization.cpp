@@ -338,20 +338,6 @@ public:
         return thisPose6D;
     }
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
     bool saveMapService(lio_sam::save_mapRequest& req, lio_sam::save_mapResponse& res)
     {
       string saveMapDirectory;
@@ -418,12 +404,57 @@ public:
       return true;
     }
 
+    bool saveOdometryToCSV() 
+    {
+        // Open the file
+        std::string filename = saveOdometryDirectory + "odometry.csv";
+        std::ofstream file(filename);
+        if (!file.is_open()) {
+            cout << "Failed to open file: " << filename << endl;
+            return false;
+        }
+
+        // Write the data
+        file << "timestamp,x,y,z,qw,qx,qy,qz\n";
+        for (const auto& pose_stamped : globalPath.poses) {
+            double timestamp = pose_stamped.header.stamp.toSec();
+            double x = pose_stamped.pose.position.x;
+            double y = pose_stamped.pose.position.y;
+            double z = pose_stamped.pose.position.z;
+            double qw = pose_stamped.pose.orientation.w;
+            double qx = pose_stamped.pose.orientation.x;
+            double qy = pose_stamped.pose.orientation.y;
+            double qz = pose_stamped.pose.orientation.z;
+
+            // Write CSV line
+            file << std::fixed << std::setprecision(12)
+                << timestamp << "," << x << "," << y << "," << z << ","
+                << qw << "," << qx << "," << qy << "," << qz << "\n";
+
+            // Check for write errors
+            if (file.fail()) {
+                cout << "Error writing to file: " << filename << endl;
+                file.close();
+                return false;
+            }
+        }
+
+        file.close();
+        return true;
+    }
+
     void visualizeGlobalMapThread()
     {
         ros::Rate rate(0.2);
         while (ros::ok()){
             rate.sleep();
             publishGlobalMap();
+        }
+
+        if (saveOdometry) {
+            if(!saveOdometryToCSV()) {
+                cout << "Fail to save odometry" << endl;
+            }
         }
 
         if (savePCD == false)
@@ -488,17 +519,6 @@ public:
         downSizeFilterGlobalMapKeyFrames.filter(*globalMapKeyFramesDS);
         publishCloud(pubLaserCloudSurround, globalMapKeyFramesDS, timeLaserInfoStamp, odometryFrame);
     }
-
-
-
-
-
-
-
-
-
-
-
 
     void loopClosureThread()
     {
