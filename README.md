@@ -1,22 +1,6 @@
 # LIO-SAM
 
-**A real-time lidar-inertial odometry package. We strongly recommend the users read this document thoroughly and test the package with the provided dataset first. A video of the demonstration of the method can be found on [YouTube](https://www.youtube.com/watch?v=A0H8CoORZJU).**
-
-## Dependency
-
-This is the original ROS1 implementation of LIO-SAM. For a ROS2 implementation see branch `ros2`.
-
-- [ROS](http://wiki.ros.org/ROS/Installation) (tested with Kinetic and Melodic. Refer to [#206](https://github.com/TixiaoShan/LIO-SAM/issues/206) for Noetic)
-  ```
-  sudo apt-get install -y ros-kinetic-navigation
-  sudo apt-get install -y ros-kinetic-robot-localization
-  sudo apt-get install -y ros-kinetic-robot-state-publisher
-  ```
-- [gtsam](https://gtsam.org/get_started/) (Georgia Tech Smoothing and Mapping library)
-  ```
-  sudo add-apt-repository ppa:borglab/gtsam-release-4.0
-  sudo apt install libgtsam-dev libgtsam-unstable-dev
-  ```
+A real-time lidar-inertial odometry package, forked by the Lunar Lab for multi-robot SLAM.
 
 ## Installation
 
@@ -75,29 +59,6 @@ The user needs to prepare the point cloud data in the correct format for cloud d
     <img src="./config/doc/imu-debug.gif" alt="drawing" width="800"/>
 </p>
 
-## Sample datasets
-
-  * Download some sample datasets to test the functionality of the package. The datasets below are configured to run using the default settings:
-    - **Walking dataset:** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-    - **Park dataset:** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-    - **Garden dataset:** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-
-  * The datasets below need the parameters to be configured. In these datasets, the point cloud topic is "points_raw." The IMU topic is "imu_correct," which gives the IMU data in ROS REP105 standard. Because no IMU transformation is needed for this dataset, the following configurations need to be changed to run this dataset successfully:
-    - The "imuTopic" parameter in "config/params.yaml" needs to be set to "imu_correct".
-    - The "extrinsicRot" and "extrinsicRPY" in "config/params.yaml" needs to be set as identity matrices.
-      - **Rotation dataset:** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-      - **Campus dataset (large):** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-      - **Campus dataset (small):** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-
-  * Ouster (OS1-128) dataset. No extrinsics need to be changed for this dataset if you are using the default settings. Please follow the Ouster notes below to configure the package to run with Ouster data. A video of the dataset can be found on [YouTube](https://youtu.be/O7fKgZQzkEo):
-    - **Rooftop dataset:** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-
-  * Livox Horizon dataset. Please refer to the following notes section for paramater changes.
-    - **Livox Horizon:** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-
-  * KITTI dataset. The extrinsics can be found in the Notes KITTI section below. To generate more bags using other KITTI raw data, you can use the python script provided in "config/doc/kitti2bag".
-    - **2011_09_30_drive_0028:** [[Google Drive](https://drive.google.com/drive/folders/1gJHwfdHCRdjP7vuT556pv8atqrCJPbUq?usp=sharing)]
-
 ## Run the package
 
 ### GRaCo Dataset
@@ -137,62 +98,6 @@ rosbag play Husky1.bag -r 3
     <img src="./config/doc/loop-closure-2.gif" alt="drawing" width="350"/>
 </p>
 
-  - **Using GPS:** The park dataset is provided for testing LIO-SAM with GPS data. This dataset is gathered by [Yewei Huang](https://robustfieldautonomylab.github.io/people.html). To enable the GPS function, change "gpsTopic" in "params.yaml" to "odometry/gps". In Rviz, uncheck "Map (cloud)" and check "Map (global)". Also check "Odom GPS", which visualizes the GPS odometry. "gpsCovThreshold" can be adjusted to filter bad GPS readings. "poseCovThreshold" can be used to adjust the frequency of adding GPS factor to the graph. For example, you will notice the trajectory is constantly corrected by GPS whey you set "poseCovThreshold" to 1.0. Because of the heavy iSAM optimization, it's recommended that the playback speed is "-r 1".
-
-<p align='center'>
-    <img src="./config/doc/gps-demo.gif" alt="drawing" width="400"/>
-</p>
-
-  - **KITTI:** Since LIO-SAM needs a high-frequency IMU for function properly, we need to use KITTI raw data for testing. One problem remains unsolved is that the intrinsics of the IMU are unknown, which has a big impact on the accuracy of LIO-SAM. Download the provided sample data and make the following changes in "params.yaml":
-    - extrinsicTrans: [-8.086759e-01, 3.195559e-01, -7.997231e-01]
-    - extrinsicRot: [9.999976e-01, 7.553071e-04, -2.035826e-03, -7.854027e-04, 9.998898e-01, -1.482298e-02, 2.024406e-03, 1.482454e-02, 9.998881e-01]
-    - extrinsicRPY: [9.999976e-01, 7.553071e-04, -2.035826e-03, -7.854027e-04, 9.998898e-01, -1.482298e-02, 2.024406e-03, 1.482454e-02, 9.998881e-01]
-    - N_SCAN: 64
-    - downsampleRate: 2 or 4
-    - loopClosureEnableFlag: true or false
-
-<p align='center'>
-    <img src="./config/doc/kitti-map.png" alt="drawing" width="300"/>
-    <img src="./config/doc/kitti-demo.gif" alt="drawing" width="300"/>
-</p>
-
-  - **Ouster lidar:** To make LIO-SAM work with Ouster lidar, some preparations need to be done on hardware and software level.
-    - Hardware:
-      - Use an external IMU. LIO-SAM does not work with the internal 6-axis IMU of Ouster lidar. You need to attach a 9-axis IMU to the lidar and perform data-gathering.
-      - Configure the driver. Change "timestamp_mode" in your Ouster launch file to "TIME_FROM_PTP_1588" so you can have ROS format timestamp for the point clouds.
-    - Config:
-      - Change "sensor" in "params.yaml" to "ouster".
-      - Change "N_SCAN" and "Horizon_SCAN" in "params.yaml" according to your lidar, i.e., N_SCAN=128, Horizon_SCAN=1024.
-    - Gen 1 and Gen 2 Ouster:
-      It seems that the point coordinate definition might be different in different generations. Please refer to [Issue #94](https://github.com/TixiaoShan/LIO-SAM/issues/94) for debugging.
-
-<p align='center'>
-    <img src="./config/doc/ouster-device.jpg" alt="drawing" width="300"/>
-    <img src="./config/doc/ouster-demo.gif" alt="drawing" width="300"/>
-</p>
-
-  - **Livox Horizon lidar:** Please note that solid-state lidar hasn't been extensively tested with LIO-SAM yet. An external IMU is also used here rather than the internal one. The support for such lidars is based on minimal change of the codebase from mechanical lidars. A customized [livox_ros_driver](https://github.com/TixiaoShan/livox_ros_driver) needs to be used to publish point cloud format that can be processed by LIO-SAM. Other SLAM solutions may offer better implementations. More studies and suggestions are welcome. Please change the following parameters to make LIO-SAM work with Livox Horizon lidar:
-    - sensor: livox
-    - N_SCAN: 6
-    - Horizon_SCAN: 4000
-    - edgeFeatureMinValidNum: 1
-    - Use [livox_ros_driver](https://github.com/TixiaoShan/livox_ros_driver) for data recording
-
-<p align='center'>
-    <img src="./config/doc/livox-demo.gif" alt="drawing" width="600"/>
-</p>
-
-## Service
-  - /lio_sam/save_map
-    - save map as a PCD file.
-      ``` bash
-        rosservice call [service] [resolution] [destination]
-      ```
-      - Example:
-      ``` bash
-        $ rosservice call /lio_sam/save_map 0.2 "/Downloads/LOAM/"
-      ```
-
 ## Issues
 
   - **Zigzag or jerking behavior**: if your lidar and IMU data formats are consistent with the requirement of LIO-SAM, this problem is likely caused by un-synced timestamp of lidar and IMU data.
@@ -228,10 +133,6 @@ Part of the code is adapted from [LeGO-LOAM](https://github.com/RobustFieldAuton
   organization={IEEE}
 }
 ```
-
-## TODO
-
-  - [ ] [Bug within imuPreintegration](https://github.com/TixiaoShan/LIO-SAM/issues/104)
 
 ## Related Package
 
