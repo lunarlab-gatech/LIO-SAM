@@ -2,6 +2,9 @@
 #include "lio_sam/cloud_info.h"
 #include "lio_sam/save_map.h"
 
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #include <gtsam/geometry/Rot3.h>
 #include <gtsam/geometry/Pose3.h>
 #include <gtsam/slam/PriorFactor.h>
@@ -403,9 +406,50 @@ public:
 
       return true;
     }
+    
+    bool createDirectories(const std::string &path) 
+    {
+        std::string tempPath;
+        std::vector<std::string> parts;
+        size_t pos = 0, found;
+        
+        // Split path by '/'
+        while ((found = path.find_first_of('/', pos)) != std::string::npos) {
+            if (found != pos) {
+                parts.push_back(path.substr(pos, found - pos));
+            }
+            pos = found + 1;
+        }
+        if (pos < path.length()) {
+            parts.push_back(path.substr(pos));
+        }
+
+        // Rebuild path step by step
+        tempPath = "";
+        if (path[0] == '/') tempPath = "/"; // absolute path
+
+        for (const auto &part : parts) {
+            tempPath += part;
+            if (mkdir(tempPath.c_str(), 0777) != 0) {
+                if (errno != EEXIST) {
+                    std::cout << "Failed to create directory: " 
+                            << tempPath << " (" << strerror(errno) << ")" << std::endl;
+                    return false;
+                }
+            }
+            tempPath += "/";
+        }
+
+        return true;
+    }
 
     bool saveOdometryToCSV() 
     {
+        // Try to create the directory
+        if (!createDirectories(saveOdometryDirectory)) {
+            return false;
+        }
+
         // Open the file
         std::string filename = saveOdometryDirectory + "odometry.csv";
         std::ofstream file(filename);

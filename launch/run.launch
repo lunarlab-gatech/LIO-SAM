@@ -5,8 +5,9 @@
     <!-- Parameters -->
     <arg name="saveOdometryDirectory" default=""/>
     <arg name="dataset" default=""/>
+    <arg name="robot" default=""/>
 
-    <rosparam file="$(find lio_sam)/config/$(arg dataset)/params.yaml" command="load" />
+    <rosparam file="$(find lio_sam)/config/$(arg dataset)/$(arg robot)/params.yaml" command="load" />
     <param name="lio_sam/saveOdometryDirectory" value="$(arg saveOdometryDirectory)" />
 
     <!--- LOAM -->

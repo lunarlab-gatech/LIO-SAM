@@ -21,6 +21,8 @@ lio_sam:
   # Export settings
   savePCD: false                               # https://github.com/TixiaoShan/LIO-SAM/issues/3
   savePCDDirectory: "/Downloads/LOAM/"         # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation
+  saveOdometry: true                          # Whether to save the odometry to a 
+  saveOdometryDirectory: ""                   # Needs to be overwritten by the launch file (to make it system agnostic instead of hardcoded paths)
 
   # Sensor Settings
   sensor: velodyne                            # lidar sensor type, either 'velodyne', 'ouster' or 'livox'
@@ -31,14 +33,14 @@ lio_sam:
   lidarMaxRange: 200.0                         # default: 1000.0, maximum lidar range to be used
 
   # IMU Settings
-  imuAccNoise: 3.9939570888238808e-03
-  imuGyrNoise: 1.5636343949698187e-03
-  imuAccBiasN: 6.4356659353532566e-05
-  imuGyrBiasN: 3.5640318696367613e-05
+  imuAccNoise: 3.9939570888238808e-04
+  imuGyrNoise: 1.5636343949698187e-04
+  imuAccBiasN: 6.4356659353532566e-06
+  imuGyrBiasN: 3.5640318696367613e-06
   imuGravity: -9.80511
   imuRPYWeight: 0.01
 
-  extrinsicTrans:  [ 0.0,  0.0,  0.5 ]
+  extrinsicTrans:  [ 0.0,  0.0,  0.85 ]
   extrinsicRot:    [ 1.0,  0.0,  0.0,
                       0.0,  1.0,  0.0,
                       0.0,  0.0,  1.0 ]
@@ -58,7 +60,7 @@ lio_sam:
   mappingSurfLeafSize: 0.4                      # default: 0.4 - outdoor, 0.2 - indoor
 
   # robot motion constraint (in case you are using a 2D robot)
-  z_tollerance: 1.0                        # meters
+  z_tollerance: 0.1                       # meters
   rotation_tollerance: 1000.0              # radians
 
   # CPU Params
