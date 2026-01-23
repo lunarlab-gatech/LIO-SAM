@@ -3,8 +3,8 @@ lio_sam:
   # Topics
   pointCloudTopic: "/points_raw"                   # Point cloud data
   imuTopic: "/imu_raw"                        # IMU data
-  odomTopic: "odometry/imu"                    # IMU pre-preintegration odometry, same frequency as IMU
-  gpsTopic: "odometry/gpsz"                    # GPS odometry topic from navsat, see module_navsat.launch file
+  odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
+  gpsTopic: "odometry/gpsz"                   # GPS odometry topic from navsat, see module_navsat.launch file
 
   # Frames
   lidarFrame: "base_link"
@@ -21,7 +21,7 @@ lio_sam:
   # Export settings
   savePCD: false                               # https://github.com/TixiaoShan/LIO-SAM/issues/3
   savePCDDirectory: "/Downloads/LOAM/"         # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation
-  saveOdometry: true                          # Whether to save the odometry to a 
+  saveOdometry: true                          # Whether to save the odometry to a file
   saveOdometryDirectory: ""                   # Needs to be overwritten by the launch file (to make it system agnostic instead of hardcoded paths)
 
   # Sensor Settings
@@ -60,8 +60,8 @@ lio_sam:
   mappingSurfLeafSize: 0.4                      # default: 0.4 - outdoor, 0.2 - indoor
 
   # robot motion constraint (in case you are using a 2D robot)
-  z_tollerance: 1000.0                       # meters
-  rotation_tollerance: 1000.0              # radians
+  z_tollerance: 1000                      # meters
+  rotation_tollerance: 1000               # radians
 
   # CPU Params
   numberOfCores: 4                              # number of cores for mapping optimization
