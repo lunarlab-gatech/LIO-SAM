@@ -80,13 +80,13 @@ rosbag play ground-01.bag -r 1
 1. Run the launch file:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-roslaunch lio_sam run.launch dataset:=Hercules version:=V2.3.AP robot:=Husky saveOdometryDirectory:=/home/$USER/data/Hercules_datasets/V2.3.AP/results/LIO-SAM/Husky1/
+roslaunch lio_sam run.launch dataset:=Hercules version:=V2.3.AC robot:=Drone saveOdometryDirectory:=/home/$USER/data/Hercules_datasets/V2.3.AC/results/LIO-SAM/Drone2/
 ```
 
 2. Play existing bag files:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-rosbag play Husky1.bag -r 1
+rosbag play Drone2.bag -r 1
 ```
 
 ## Other notes
