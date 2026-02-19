@@ -66,13 +66,13 @@ The user needs to prepare the point cloud data in the correct format for cloud d
 1. Run the launch file:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-roslaunch lio_sam run.launch dataset:=GRaCo saveOdometryDirectory:=/home/$USER/data/GRaCo_dataset/results/LIO-SAM/ground/ground-01/
+roslaunch lio_sam run.launch dataset:=GrAco version:=V1.0 robot:=Aerial saveOdometryDirectory:=/home/$USER/data/GrAco_dataset/V1.0/results/LIO-SAM/aerial/aerial-08/
 ```
 
 2. Play existing bag files:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-rosbag play ground-01.bag -r 1
+rosbag play aerial-08.bag -r 1
 ```
 
 ### HERCULES Dataset
@@ -80,7 +80,7 @@ rosbag play ground-01.bag -r 1
 1. Run the launch file:
 ```
 source ~/lio_sam_ws/devel/setup.bash
-roslaunch lio_sam run.launch dataset:=Hercules version:=V2.3.AC robot:=Drone saveOdometryDirectory:=/home/$USER/data/Hercules_datasets/V2.3.AC/results/LIO-SAM/Drone2/
+roslaunch lio_sam run.launch dataset:=Hercules version:=V2.4.F robot:=Drone saveOdometryDirectory:=/home/$USER/data/Hercules_datasets/V2.4.F/results/LIO-SAM/Drone2/
 ```
 
 2. Play existing bag files:
