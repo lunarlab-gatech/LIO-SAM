@@ -1,8 +1,10 @@
 <launch>
 
     <arg name="project" default="lio_sam"/>
+    <arg name="dataset" default=""/>
+    <arg name="rviz_config" default="$(eval 'rviz_' + arg('dataset') + '.rviz' if arg('dataset') != '' else 'rviz.rviz')"/>
 
     <!--- Run Rviz-->
-    <node pkg="rviz" type="rviz" name="$(arg project)_rviz" args="-d $(find lio_sam)/launch/include/config/rviz.rviz" />
+    <node pkg="rviz" type="rviz" name="$(arg project)_rviz" args="-d $(find lio_sam)/launch/include/config/$(arg rviz_config)" />
 
 </launch>
