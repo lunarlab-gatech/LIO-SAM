@@ -89,6 +89,20 @@ source ~/lio_sam_ws/devel/setup.bash
 rosbag play Drone2.bag -r 1
 ```
 
+### Meronomy Dataset
+1. Run the launch file:
+```
+source ~/lio_sam_ws/devel/setup.bash
+roslaunch lio_sam run.launch dataset:=Meronomy version:=V1.1 robot:=Drone saveOdometryDirectory:=/home/$USER/data/Meronomy_datasets/V1.1/results/LIO-SAM/Drone1/
+```
+
+2. Play existing bag files:
+```
+source ~/lio_sam_ws/devel/setup.bash
+rosbag play Drone1.bag -r 1
+```
+
+
 ## Other notes
 
   - **Loop closure:** The loop function here gives an example of proof of concept. It is directly adapted from LeGO-LOAM loop closure. For more advanced loop closure implementation, please refer to [ScanContext](https://github.com/irapkaist/SC-LeGO-LOAM). Set the "loopClosureEnableFlag" in "params.yaml" to "true" to test the loop closure function. In Rviz, uncheck "Map (cloud)" and check "Map (global)". This is because the visualized map - "Map (cloud)" - is simply a stack of point clouds in Rviz. Their postion will not be updated after pose correction. The loop closure function here is simply adapted from LeGO-LOAM, which is an ICP-based method. Because ICP runs pretty slow, it is suggested that the playback speed is set to be "-r 1". You can try the Garden dataset for testing.

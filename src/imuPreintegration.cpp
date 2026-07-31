@@ -41,6 +41,8 @@ public:
     double lidarOdomTime = -1;
     deque<nav_msgs::Odometry> imuOdomQueue;
 
+    std::ofstream csvFile;
+
     TransformFusion()
     {
         if(lidarFrame != baselinkFrame)
@@ -61,6 +63,22 @@ public:
 
         pubImuOdometry   = nh.advertise<nav_msgs::Odometry>(odomTopic, 2000);
         pubImuPath       = nh.advertise<nav_msgs::Path>    ("lio_sam/imu/path", 1);
+
+        if (saveOdometry)
+        {
+            std::string filename = saveOdometryDirectory + "odometryHighHertz.csv";
+            csvFile.open(filename);
+            if (csvFile.is_open())
+                csvFile << "timestamp,x,y,z,qw,qx,qy,qz\n";
+            else
+                ROS_WARN("Failed to open high-Hz odometry CSV: %s", filename.c_str());
+        }
+    }
+
+    ~TransformFusion()
+    {
+        if (csvFile.is_open())
+            csvFile.close();
     }
 
     Eigen::Affine3f odom2affine(nav_msgs::Odometry odom)
@@ -119,6 +137,19 @@ public:
         laserOdometry.pose.pose.position.z = z;
         laserOdometry.pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(roll, pitch, yaw);
         pubImuOdometry.publish(laserOdometry);
+
+        // write high-Hz odometry to CSV
+        if (csvFile.is_open())
+        {
+            double qw = laserOdometry.pose.pose.orientation.w;
+            double qx = laserOdometry.pose.pose.orientation.x;
+            double qy = laserOdometry.pose.pose.orientation.y;
+            double qz = laserOdometry.pose.pose.orientation.z;
+            csvFile << std::fixed << std::setprecision(12)
+                    << laserOdometry.header.stamp.toSec() << ","
+                    << x << "," << y << "," << z << ","
+                    << qw << "," << qx << "," << qy << "," << qz << "\n";
+        }
 
         // publish tf
         static tf::TransformBroadcaster tfOdom2BaseLink;
